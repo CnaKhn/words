@@ -44,6 +44,33 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
         return characterPlaceHolders.size();
     }
 
+    public void add(CharacterPlaceHolder characterPlaceHolder) {
+        this.characterPlaceHolders.add(characterPlaceHolder);
+        notifyItemInserted(characterPlaceHolders.size() - 1);
+    }
+
+    public void clear() {
+        this.characterPlaceHolders.clear();
+        notifyDataSetChanged();
+    }
+
+    public String getWord() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < characterPlaceHolders.size(); i++) {
+            stringBuilder.append(characterPlaceHolders.get(i).getCharacter());
+        }
+        return stringBuilder.toString();
+    }
+
+    public void makeWordVisible(String word) {
+        for (int i = 0; i < characterPlaceHolders.size(); i++) {
+            if (characterPlaceHolders.get(i).getTag() != null && characterPlaceHolders.get(i).getTag().equalsIgnoreCase(word)) {
+                characterPlaceHolders.get(i).setVisible(true);
+                notifyItemChanged(i);
+            }
+        }
+    }
+
     public class CharViewHolder extends RecyclerView.ViewHolder {
         private TextView tvChar;
 
@@ -57,6 +84,10 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
                 tvChar.setText(characterPlaceHolder.getCharacter().toString());
                 tvChar.setVisibility(View.VISIBLE);
             } else tvChar.setVisibility(View.INVISIBLE);
+
+            if (characterPlaceHolder.isNull()) {
+                itemView.setBackground(null);
+            } else itemView.setBackgroundResource(R.drawable.background_rv_item);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
