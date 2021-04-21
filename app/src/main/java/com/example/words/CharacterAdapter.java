@@ -14,6 +14,16 @@ import java.util.List;
 public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.CharViewHolder> {
     private List<CharacterPlaceHolder> characterPlaceHolders = new ArrayList<>();
 
+    public void setOnRvItemClickListener(OnRvItemClickListener<CharacterPlaceHolder> onRvItemClickListener) {
+        this.onRvItemClickListener = onRvItemClickListener;
+    }
+
+    private OnRvItemClickListener<CharacterPlaceHolder> onRvItemClickListener;
+
+    public CharacterAdapter() {
+
+    }
+
     public CharacterAdapter(List<CharacterPlaceHolder> characterPlaceHolders) {
         this.characterPlaceHolders = characterPlaceHolders;
     }
@@ -47,6 +57,15 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
                 tvChar.setText(characterPlaceHolder.getCharacter().toString());
                 tvChar.setVisibility(View.VISIBLE);
             } else tvChar.setVisibility(View.INVISIBLE);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onRvItemClickListener != null) {
+                        onRvItemClickListener.onItemClick(characterPlaceHolder, getAdapterPosition());
+                    }
+                }
+            });
         }
     }
 }

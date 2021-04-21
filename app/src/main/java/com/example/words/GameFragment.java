@@ -18,6 +18,9 @@ import java.util.List;
 public class GameFragment extends Fragment {
     private Level level;
     private static final String TAG = "GameFragment";
+    private View guessActionContainer;
+    private View btnAccept, btnCancel;
+    private CharacterAdapter guessCharsAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +41,11 @@ public class GameFragment extends Fragment {
         RecyclerView charsRV = view.findViewById(R.id.rv_game_characters);
         charsRV.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
 
+        guessActionContainer = view.findViewById(R.id.frame_game_guessActions);
+        btnAccept = view.findViewById(R.id.btn_game_accept);
+        btnCancel = view.findViewById(R.id.btn_game_cancel);
+
+
         List<Character> uniqueChars = GamePlayUtil.extractUniqueChars(level.getWords());
         List<CharacterPlaceHolder> characterPlaceHolders = new ArrayList<>();
 
@@ -50,5 +58,16 @@ public class GameFragment extends Fragment {
 
         CharacterAdapter characterAdapter = new CharacterAdapter(characterPlaceHolders);
         charsRV.setAdapter(characterAdapter);
+        characterAdapter.setOnRvItemClickListener(new OnRvItemClickListener<CharacterPlaceHolder>() {
+            @Override
+            public void onItemClick(CharacterPlaceHolder item, int position) {
+                guessActionContainer.setVisibility(View.VISIBLE);
+            }
+        });
+
+        RecyclerView rvGuessChars = view.findViewById(R.id.rv_game_guess);
+        rvGuessChars.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        guessCharsAdapter = new CharacterAdapter();
+        rvGuessChars.setAdapter(guessCharsAdapter);
     }
 }
